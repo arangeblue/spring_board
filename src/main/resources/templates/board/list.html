@@ -8,8 +8,35 @@
 
         <div class="starter-template">
             <h1>board</h1>
-        </div>
+            <div>총 건수 : <span th:text="${#lists.size(boards)}"></span></div>
 
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">index</th>
+                        <th scope="col">title</th>
+                        <th scope="col">content</th>
+                        <th scope="col">writer</th>
+                        <th scope="col">hits</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="board : ${boards}">
+                        <th scope="row" th:text="${board.id}">1</th>
+                        <td><a th:text="${board.title}" th:href="@{/board/write(id=${board.id})}">title</a></td>
+                        <td th:text="${board.content}">content</td>
+                        <td th:text="${board.writer}">writer</td>
+                        <td th:text="${board.hits}">hits</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="text-right">
+                <a thpe="button" class="btn btn-primary" th:href="@{/board/write}">글쓰기</a>
+            </div>
+            
+        </div>
     </main>
 
 

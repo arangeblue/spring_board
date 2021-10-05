@@ -1,15 +1,16 @@
 package com.orangeblue.myboard.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
-import com.orangeblue.myboard.controller.service.BoardService;
 import com.orangeblue.myboard.domain.Board;
-import com.orangeblue.myboard.repository.BoardRepository;
+import com.orangeblue.myboard.service.BoardService;
 import com.orangeblue.myboard.validator.BoardValidator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,10 +33,17 @@ public class BoardController {
     private BoardValidator boardValidator;
 
     @GetMapping("/list")
-    public String boardList(Model model) {
+    public String boardList(Model model, @RequestParam(defaultValue = "", required = false) String searchText, @PageableDefault(size = 2) Pageable pageable) {
 
-        List<Board> boards = boardService.findAll();
-
+        // Page<Board> boards = boardService.findAll(pageable);
+        Page<Board> boards = boardService.searchByTitleOrContent(searchText, searchText, pageable);
+        
+        int startPage = Math.max(1, boards.getPageable().getPageNumber() - 4);
+        int endPage = Math.min(boards.getTotalPages(), boards.getPageable().getPageNumber() + 4);
+        int currentPageNumber = boards.getPageable().getPageNumber();
+        model.addAttribute("currentPageNumber", currentPageNumber);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         model.addAttribute("boards", boards);
         return "board/list";
     }
@@ -66,4 +74,5 @@ public class BoardController {
         boardService.save(board);
         return "redirect:/board/list";
     }
+
 }

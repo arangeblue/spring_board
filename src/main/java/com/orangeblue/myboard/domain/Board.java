@@ -2,13 +2,19 @@ package com.orangeblue.myboard.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
@@ -22,6 +28,9 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "BOARDS")
 public class Board extends BaseTime{
     
     @Id
@@ -43,17 +52,23 @@ public class Board extends BaseTime{
     @Column(name = "board_writer", length = 50, nullable = false)
     private String writer;
 
-    @Column(name = "hits")
+    @Column(name = "hits", columnDefinition = "int default 0", updatable = true)
     private int hits;
 
-    public Board(String title, String content, String writer) {
-        this.title = title;
-        this.content = content;
-        this.writer = writer;
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
+    @JoinColumn(name = "USERS_ID")
+    private User user;
+
+
+    @Override
+    public String toString() {
+        return "Board {" + " id='" + id + "'" + ", title='" + title + "'" + ", content='" + content + "'" + ", writer='"
+                + writer + "'" + ", hits='" + hits + "'" + ", user='" + user + "'" + "}";
     }
 
-    public Board() {
-
+    public void addUser(User user) {
+        this.user = user;
+        user.getBoards().add(this);
     }
     
 

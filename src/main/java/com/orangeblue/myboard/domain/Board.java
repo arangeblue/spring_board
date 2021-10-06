@@ -12,6 +12,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,23 +49,19 @@ public class Board extends BaseTime{
     @Column(name = "board_content", length = 500, nullable = false)
     private String content;
 
-    @NotEmpty
-    @Size(min = 2, max = 50)
-    @Column(name = "board_writer", length = 50, nullable = false)
-    private String writer;
 
     @Column(name = "hits", columnDefinition = "int default 0", updatable = true)
     private int hits;
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
     @JoinColumn(name = "USERS_ID")
+    @JsonIgnore
     private User user;
 
 
     @Override
     public String toString() {
-        return "Board {" + " id='" + id + "'" + ", title='" + title + "'" + ", content='" + content + "'" + ", writer='"
-                + writer + "'" + ", hits='" + hits + "'" + ", user='" + user + "'" + "}";
+        return "Board {" + " id='" + id + "'" + ", title='" + title + "'" + ", content='" + content + "'" + ", hits='" + hits + "'" + ", user='" + user + "'" + "}";
     }
 
     public void addUser(User user) {

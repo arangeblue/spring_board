@@ -5,6 +5,6 @@ import com.orangeblue.myboard.domain.User;
 
 public interface UserService {
     
-    public void userSave(User user, RoleEnum roleEnum); 
+    public void userSave(User user); 
 
 }

@@ -23,9 +23,14 @@ public class AccountController {
         return "account/login";
     }
 
+    @GetMapping("/register")
+    public String register() {
+        return "account/register";
+    }
+
     @PostMapping("/register")
-    public String register(User user, RoleEnum roleEnum) {
-        userService.userSave(user, roleEnum);
-        return "account/login";
+    public String register(User user) {
+        userService.userSave(user);
+        return "redirect:/board/list";
     }
 }

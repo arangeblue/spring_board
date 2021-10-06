@@ -5,6 +5,7 @@ import java.util.List;
 import com.orangeblue.myboard.domain.Board;
 import com.orangeblue.myboard.service.BoardService;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,8 +33,8 @@ public class BoardApiController {
     }
 
     @PostMapping("/boards")
-    public Board newBoard(@RequestBody Board board) {
-        return boardService.save(board);
+    public Board save(@RequestBody Board board) {
+        return boardService.saveApi(board);
     }
 
     @PutMapping("/boards/{id}")
@@ -41,6 +42,8 @@ public class BoardApiController {
         return boardService.update(newBoard, id);
     }
 
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/boards/{id}")
     public void deleteBoard(@PathVariable Long id) {
         boardService.delete(id);

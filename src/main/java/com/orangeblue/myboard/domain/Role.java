@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +32,9 @@ public class Role {
     private RoleEnum name;
 
     @OneToMany(mappedBy = "role")
-    private List<UserRole> userRole = new ArrayList<UserRole>();
+    @JsonIgnore
+    private List<UserRole> userRole;
+
+
     
 }

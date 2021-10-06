@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import com.orangeblue.myboard.domain.Board;
+import com.orangeblue.myboard.domain.User;
 import com.orangeblue.myboard.repository.BoardRepository;
+import com.orangeblue.myboard.repository.UserRepository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
     @Override
     public Page<Board> findAll(Pageable pageable) {
@@ -35,8 +38,11 @@ public class BoardServiceImpl implements BoardService {
 
     @Transactional
     @Override
-    public Board save(Board board) {
+    public Board saveBoard(Board board, String username) {
 
+        User findUser = userRepository.findByUsername(username);
+
+        board.setUser(findUser);
         return boardRepository.save(board);
     }
 
@@ -54,7 +60,7 @@ public class BoardServiceImpl implements BoardService {
     public Board update(Board newBoard, Long id) {
         Board findBoard = boardRepository.findById(id).orElseThrow(() -> new  NoSuchElementException());
 
-        findBoard.setWriter(newBoard.getWriter());
+        
         findBoard.setTitle(newBoard.getTitle());
         findBoard.setContent(newBoard.getContent());
 
@@ -74,6 +80,12 @@ public class BoardServiceImpl implements BoardService {
 
         
         return searchByTitleOrContent;
+    }
+
+    @Override
+    @Transactional
+    public Board saveApi(Board board) {
+        return boardRepository.save(board);
     }
 
    

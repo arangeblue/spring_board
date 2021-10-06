@@ -3,12 +3,10 @@ package com.orangeblue.myboard.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -47,12 +45,12 @@ public class User extends BaseTime {
     @OneToMany(mappedBy = "user")
     List<Board> boards = new ArrayList<>();
 
-    @OneToMany(
-                mappedBy = "user", 
-                targetEntity = UserRole.class,
-                fetch = FetchType.LAZY
-                )
-    private List<UserRole> userRole = new ArrayList<UserRole>();
+    // @OneToMany(
+    //             mappedBy = "user", 
+    //             targetEntity = UserRole.class,
+    //             fetch = FetchType.LAZY
+    //             )
+    // private List<UserRole> userRole;
 
     @Column(name = "user_role")
     @Enumerated(EnumType.STRING)

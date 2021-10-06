@@ -1,4 +1,4 @@
-package com.orangeblue.myboard.security;
+package com.orangeblue.myboard.config;
 
 
 import javax.sql.DataSource;
@@ -27,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .csrf().disable()
             .authorizeRequests()
-                .antMatchers("/", "/home","/css/**","/js/**").permitAll()
+                .antMatchers("/","/account/register","/css/**","/js/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
@@ -42,18 +42,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // Authentication 인증
     // Authorization 권한
 
+    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .passwordEncoder(passwordEncoder())
                 .usersByUsernameQuery("select username, password, enabled " 
-                    + "from user "
+                    + "from users "
                     + "where username = ?")
-                .authoritiesByUsernameQuery("select username, name "
-                    + "from user_role ur inner join user u on ur.user_id = u.id "
-                    + "inner join role r on ur.role_id = r.id"
-                    + "where username = ?");
+                .authoritiesByUsernameQuery("select u.username, r.name "
+                    + "from user_role ur inner join users u on ur.user_id = u.id "
+                    + "inner join role r on ur.role_id = r.id "
+                    + "where u.username = ?");
     }
 
 

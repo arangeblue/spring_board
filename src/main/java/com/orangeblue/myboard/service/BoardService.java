@@ -18,7 +18,9 @@ public interface BoardService {
 
     public Page<Board> searchByTitleOrContent(String title, String content, Pageable pageable);
 
-    public Board save(Board board);
+    public Board saveApi(Board board);
+
+    public Board saveBoard(Board board, String username);
 
     public Board update(Board board, Long id);
 

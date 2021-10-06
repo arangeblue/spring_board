@@ -23,15 +23,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "USER_ROLE")
-public class UserRole implements Serializable{
+public class UserRole{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private Role role;
+    
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
